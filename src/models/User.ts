@@ -1,9 +1,15 @@
 import mongoose, { Schema, models } from "mongoose";
 
-const userSchema = new Schema({
+//Document adds all the properties and methods that a MongoDB document has (.save(), .toJSON(), etc...)
+export interface IUser extends Document {
+  name: string;
+  email: string;
+  password?: string;
+}
+
+const userSchema = new Schema<IUser>({
   name: String,
   email: String,
 });
 
-const User = models.User || mongoose.model("User", userSchema);
-export default User;
+export const User = models.User || mongoose.model("User", userSchema);
