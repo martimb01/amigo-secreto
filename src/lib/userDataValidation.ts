@@ -13,7 +13,7 @@ export function validateUserData(
   if (validationType === validationTypes.Password) {
     const minLength = 6;
     const maxLength = 72;
-    const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,72}$/;
+    const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{6,72}$/;
 
     if (dataToValidate.length < minLength)
       return "Password must be at least 6 characters.";
@@ -28,4 +28,6 @@ export function validateUserData(
   if (validationType === validationTypes.Email) {
     if (!dataToValidate.includes("@")) return "Invalid email"; //TODO Make the email constrains more robust
   }
+
+  return null;
 }
