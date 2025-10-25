@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "@auth/mongodb-adapter": "^3.11.0",
     "mongoose": "^8.18.2",
     "next": "15.5.4",
     "next-auth": "^4.24.11",
