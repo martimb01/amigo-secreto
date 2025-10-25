@@ -1,13 +1,13 @@
 import { NextResponse } from "next/server";
-import { connectDB } from "../../../lib/mongoDbAdvanced";
+import { connectDB } from "../../../../lib/mongoDbAdvanced";
 import { User } from "@/models/User";
 import {
   validateUserData,
   validationTypes,
-} from "../../../lib/userDataValidation";
+} from "../../../../lib/userDataValidation";
 import bcrypt from "bcrypt";
 
-//To create/register new users
+//Register new Users
 export async function POST(req: Request) {
   try {
     await connectDB();

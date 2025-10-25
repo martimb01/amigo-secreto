@@ -1,21 +1,15 @@
-import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import AppleProvider from "next-auth/providers/apple";
+import NextAuth, { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { MongoDBAdapter } from "@auth/mongodb-adapter";
-import { connectDB } from "@/lib/mongoDbAdvanced";
+import bcrypt from "bcrypt";
 
-const handler = NextAuth({
-  adapter: MongoDBAdapter(connectDB),
+import { connectDB } from "@/lib/mongoDbAdvanced";
+import { User } from "@/models/User";
+
+export const authOptions: NextAuthOptions = {
+  // Stateless sessions: no DB adapter needed
+  session: { strategy: "jwt" },
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    }),
-    AppleProvider({
-      clientId: process.env.APPLE_CLIENT_ID!,
-      clientSecret: process.env.APPLE_CLIENT_SECRET!,
-    }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {
@@ -23,15 +17,36 @@ const handler = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        // custom login logic (compare hashed password from Mongo)
-        const user = await verifyUser(credentials.email, credentials.password);
-        if (!user) throw new Error("Invalid credentials");
-        return user;
+        try {
+          const email = credentials?.email?.trim();
+          const password = credentials?.password ?? "";
+          if (!email || !password) return null;
+
+          await connectDB();
+
+          // Find user by email
+          const user: any = await User.findOne({ email });
+          if (!user || !user.password) return null;
+
+          //Check if credential password matches the user's stored password
+          const isValid = await bcrypt.compare(password, user.password);
+          if (!isValid) return null;
+
+          // Return minimal user for JWT
+          return {
+            id: String(user._id),
+            name: user.name,
+            email: user.email,
+          };
+        } catch (err) {
+          console.error("Credentials authorize error", err);
+          return null;
+        }
       },
     }),
   ],
-  session: { strategy: "jwt" },
-  secret: process.env.NEXTAUTH_SECRET,
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };
