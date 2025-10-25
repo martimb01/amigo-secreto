@@ -30,17 +30,39 @@ export async function POST(req: Request) {
       );
     }
 
+    // Prevent duplicate emails early (still race-safe via catch below)
+    const alreadyExistingEmail = await User.exists({ email });
+    if (alreadyExistingEmail) {
+      return NextResponse.json(
+        { error: "Email already registered" },
+        { status: 409 },
+      );
+    }
+
     // Hash the password before saving
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
+    //Creating the user on the DB
     await User.create({ name, email, password: hashedPassword });
-
     return NextResponse.json(`User created, ${name}, ${email} `, {
       status: 201,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("!", error);
+
+    // Handle Mongo duplicate key (unique index) violations
+    if (
+      error?.code === 11000 &&
+      (error?.keyPattern?.email || error?.keyValue?.email)
+    ) {
+      return NextResponse.json(
+        { error: "Email already registered" },
+        { status: 409 },
+      );
+    }
+
+    // Fallback to original 500 for other errors (incl. connect failures)
     return NextResponse.json(
       { error: "Failed to connect to mongoDB" },
       { status: 500 },
