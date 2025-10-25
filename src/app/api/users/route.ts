@@ -5,6 +5,7 @@ import {
   validateUserData,
   validationTypes,
 } from "../../../lib/userDataValidation";
+import bcrypt from "bcrypt";
 
 //To create/register new users
 export async function POST(req: Request) {
@@ -29,7 +30,12 @@ export async function POST(req: Request) {
       );
     }
 
-    await User.create({ name, email, password });
+    // Hash the password before saving
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    await User.create({ name, email, password: hashedPassword });
+
     return NextResponse.json(`User created, ${name}, ${email} `, {
       status: 201,
     });

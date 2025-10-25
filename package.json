@@ -11,6 +11,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "mongoose": "^8.18.2",
     "next": "15.5.4",
     "next-auth": "^4.24.11",
@@ -19,6 +20,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.0",
+    "@types/bcrypt": "^6.0.0",
     "@types/jest": "^30.0.0",
     "@types/node": "^20",
     "@types/react": "^19",
