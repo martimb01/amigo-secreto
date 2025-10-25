@@ -45,6 +45,22 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      // When user logs in, persist their id in the token
+      if (user?.id) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      // Expose id in session.user so you can access it on the client
+      if (token?.id) {
+        if (session.user) session.user.id = token.id;
+      }
+      return session;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);
