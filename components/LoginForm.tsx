@@ -29,7 +29,7 @@ export default function LoginForm() {
     if (!res?.ok) {
       setError(res?.error || "Invalid credentials");
     } else {
-      router.push("/createGroup");
+      router.push("/dashboard");
     }
   }
 

@@ -36,11 +36,11 @@ export default function RegisterForm() {
       setName("");
       setEmail("");
       setPassword("");
+      router.push("/login");
     } catch (err: any) {
       setError(err.message);
     } finally {
       setLoading(false);
-      router.push("/login");
     }
   }
 
