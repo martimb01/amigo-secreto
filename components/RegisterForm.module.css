@@ -1,0 +1,58 @@
+.formContainer {
+  max-width: 400px;
+  margin: 2rem auto;
+  padding: 2rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.title {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.inputField {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #aaa;
+  font-size: 1rem;
+}
+
+.inputField:focus {
+  outline: none;
+  border-color: #0070f3;
+  box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.2);
+}
+
+.submitButton {
+  padding: 0.5rem;
+  font-size: 1rem;
+  background-color: #0070f3;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.submitButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.errorMessage {
+  color: #d00;
+  font-size: 0.875rem;
+  text-align: center;
+}
+
+.successMessage {
+  color: #090;
+  font-size: 0.875rem;
+  text-align: center;
+}

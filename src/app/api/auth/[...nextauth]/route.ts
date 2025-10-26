@@ -2,7 +2,7 @@ import NextAuth, { type NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 
-import { connectDB } from "@/lib/mongoDbAdvanced";
+import { connectDB } from "@/lib/mongoDbServerless";
 import { User } from "@/models/User";
 
 export const authOptions: NextAuthOptions = {
@@ -56,8 +56,9 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       // Expose id in session.user so you can access it on the client
       if (token?.id) {
-        if (session.user) session.user.id = token.id;
+        session.user.id = token.id;
       }
+
       return session;
     },
   },

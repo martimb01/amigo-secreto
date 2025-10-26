@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { connectDB } from "../../../../lib/mongoDbAdvanced";
+import { connectDB } from "../../../../lib/mongoDbServerless";
 import { User } from "@/models/User";
 import {
   validateUserData,
@@ -15,7 +15,7 @@ export async function POST(req: Request) {
 
     if (!name || !email || !password) {
       return NextResponse.json(
-        { error: "Cannot have empty fields" },
+        { error: "Cannot have empty fields dawg" },
         { status: 400 },
       );
     }
@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     const alreadyExistingEmail = await User.exists({ email });
     if (alreadyExistingEmail) {
       return NextResponse.json(
-        { error: "Email already registered" },
+        { error: "Email already registered dawg" },
         { status: 409 },
       );
     }
