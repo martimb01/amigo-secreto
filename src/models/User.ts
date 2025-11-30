@@ -1,13 +1,13 @@
 import mongoose, { Schema, models } from "mongoose";
 
 //Document adds all the properties and methods that a MongoDB document has (.save(), .toJSON(), etc...)
-export interface IUser extends Document {
+export interface UserInterface extends Document {
   name: string;
   email: string;
   password?: string;
 }
 
-const userSchema = new Schema<IUser>({
+const userSchema = new Schema<UserInterface>({
   name: {
     type: String,
     required: true,
